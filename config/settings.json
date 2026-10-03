@@ -1,7 +1,7 @@
 {
   "api": {
     "name": "행정안전부_건강_의료기기판매(임대)업 조회서비스",
-    "endpoint": "여기에_End_Point_붙여넣기",
+    "endpoint": "https://apis.data.go.kr/1741000/medical_device_sales_rental",
     "params": {
       "type": "json"
     },
