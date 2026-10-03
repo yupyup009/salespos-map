@@ -1,0 +1,19 @@
+name: API 구조 확인 (0단계)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: API 1페이지 받아서 필드 구조 출력
+        env:
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+          DATA_GO_KR_ENDPOINT: ${{ vars.DATA_GO_KR_ENDPOINT }}
+        run: python scripts/fetch.py --inspect

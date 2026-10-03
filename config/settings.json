@@ -1,0 +1,32 @@
+{
+  "api": {
+    "name": "행정안전부_건강_의료기기판매(임대)업 조회서비스",
+    "endpoint": "여기에_End_Point_붙여넣기",
+    "params": {
+      "type": "json"
+    },
+    "page_param": "pageNo",
+    "size_param": "numOfRows",
+    "page_size": 1000
+  },
+
+  "coord_crs": "auto",
+
+  "fields": {
+    "id":          ["MNG_NO", "mngNo", "mgtNo", "MGT_NO", "관리번호"],
+    "name":        ["BPLC_NM", "bplcNm", "사업장명"],
+    "status":      ["SALS_STTS_NM", "TRD_STATE_NM", "trdStateNm", "영업상태명"],
+    "status_code": ["SALS_STTS_CD", "TRD_STATE_GBN", "trdStateGbn", "영업상태구분코드"],
+    "detail_status": ["DTL_SALS_STTS_NM", "DTL_STATE_NM", "dtlStateNm", "상세영업상태명"],
+    "road_addr":   ["ROAD_NM_ADDR", "RDN_WHL_ADDR", "rdnWhlAddr", "도로명전체주소", "도로명주소"],
+    "jibun_addr":  ["LOTNO_ADDR", "SITE_WHL_ADDR", "siteWhlAddr", "소재지전체주소", "지번주소"],
+    "phone":       ["TELNO", "SITE_TEL", "siteTel", "소재지전화", "전화번호"],
+    "x":           ["CRD_INFO_X", "X", "x", "좌표정보X(EPSG5174)", "좌표정보x(epsg5174)", "좌표정보(X)"],
+    "y":           ["CRD_INFO_Y", "Y", "y", "좌표정보Y(EPSG5174)", "좌표정보y(epsg5174)", "좌표정보(Y)"],
+    "permit_date": ["LCPMT_YMD", "APV_PERM_YMD", "apvPermYmd", "인허가일자"],
+    "close_date":  ["CLSBIZ_YMD", "DCB_YMD", "dcbYmd", "폐업일자"],
+    "updated_at":  ["LAST_MDFCN_PNT", "LAST_MOD_TS", "lastModTs", "최종수정시점"]
+  },
+
+  "closed_status_words": ["폐업", "휴업", "취소", "말소", "직권", "만료", "정지"]
+}

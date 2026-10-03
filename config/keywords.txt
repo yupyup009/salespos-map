@@ -1,0 +1,23 @@
+# 사업장명에 아래 단어가 하나라도 들어가면 리스트에 포함합니다. (한 줄에 하나, 대소문자·띄어쓰기 무시)
+보청기
+난청
+히어링
+오티콘
+포낙
+와이덱스
+시그니아
+벨톤
+유니트론
+렉스톤
+버나폰
+스타키
+hearing
+oticon
+phonak
+widex
+signia
+beltone
+unitron
+rexton
+bernafon
+starkey
