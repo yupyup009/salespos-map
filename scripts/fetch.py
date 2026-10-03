@@ -16,6 +16,7 @@ import os
 import re
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -187,7 +188,8 @@ def call_api(settings, page, size, retries=4, url=None):
             return obj
         except (requests.RequestException, ApiError, ET.ParseError, json.JSONDecodeError) as e:
             last = e
-            if isinstance(e, ApiError) and not str(e).startswith("HTTP 5"):
+            # 초당 호출 제한(23)·서버 오류(5xx)·네트워크 오류는 잠시 쉬었다가 다시 시도
+            if isinstance(e, ApiError) and not (str(e).startswith("HTTP 5") or e.code in {"23", "99"}):
                 raise
             time.sleep(2 ** (attempt + 1))
     raise ApiError(f"API 호출 실패 (페이지 {page}): {last}")
@@ -225,22 +227,44 @@ def resolve_endpoint(settings):
 
 
 def fetch_all(settings):
-    size = int(settings["api"].get("page_size", 1000))
-    records, page, total = [], 1, None
-    while True:
-        obj = call_api(settings, page, size)
-        batch = find_records(obj) or []
-        if total is None:
-            t = find_value(obj, {"totalCount", "total_count", "TOTAL_COUNT", "list_total_count"})
-            total = int(t) if t not in (None, "") else None
-            print(f"전체 건수: {total if total is not None else '알 수 없음'}")
-        records.extend(batch)
-        print(f"  {page}페이지: {len(batch)}건 (누적 {len(records)})")
-        # 서버가 numOfRows를 더 작게 잘라 줄 수도 있으므로 totalCount를 기준으로 끝을 판단한다
-        if not batch or (total is not None and len(records) >= total) or (total is None and len(batch) < size):
-            break
-        page += 1
-        time.sleep(0.2)
+    """1페이지로 전체 건수와 실제 페이지 크기를 확인한 뒤, 나머지 페이지를 동시에 받는다.
+
+    이 API는 numOfRows를 크게 줘도 한 번에 100건까지만 주므로(약 2,500페이지),
+    한 장씩 받으면 1시간 넘게 걸린다.
+    """
+    size = int(settings["api"].get("page_size", 100))
+    workers = int(settings["api"].get("workers", 6))
+    first = call_api(settings, 1, size)
+    batch = find_records(first) or []
+    t = find_value(first, {"totalCount", "total_count", "TOTAL_COUNT", "list_total_count"})
+    total = int(t) if t not in (None, "") else None
+    print(f"전체 건수: {total if total is not None else '알 수 없음'}, 한 페이지: {len(batch)}건", flush=True)
+
+    if total is None or not batch:
+        # 전체 건수를 모르면 빈 페이지가 나올 때까지 차례로 받는다
+        records, page = list(batch), 1
+        while batch and len(batch) >= size:
+            page += 1
+            batch = find_records(call_api(settings, page, size)) or []
+            records.extend(batch)
+        return records, total
+
+    per_page = len(batch)
+    pages = -(-total // per_page)
+    results = {1: batch}
+    started = time.time()
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {pool.submit(lambda p: find_records(call_api(settings, p, size)) or [], p): p
+                   for p in range(2, pages + 1)}
+        for done, fut in enumerate(as_completed(futures), start=2):
+            results[futures[fut]] = fut.result()  # 실패한 페이지가 있으면 여기서 예외 → 전체 중단
+            if done % 200 == 0 or done == pages:
+                print(f"  {done}/{pages}페이지 ({time.time() - started:.0f}초)", flush=True)
+
+    records = [r for p in sorted(results) for r in results[p]]
+    print(f"받은 건수: {len(records)} / {total}", flush=True)
+    if len(records) < total * 0.98:
+        raise ApiError(f"받은 건수({len(records)})가 전체 건수({total})보다 너무 적습니다. 다음 실행 때 다시 시도합니다.")
     return records, total
 
 

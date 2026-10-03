@@ -15,6 +15,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v5
 
@@ -33,7 +34,7 @@ jobs:
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
           DATA_GO_KR_ENDPOINT: ${{ vars.DATA_GO_KR_ENDPOINT }}
           KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
-        run: python scripts/fetch.py
+        run: python -u scripts/fetch.py
 
       - name: 변경 사항 커밋
         run: |
@@ -44,6 +45,7 @@ jobs:
             echo "변경 없음"
           else
             git commit -m "데이터 자동 업데이트 $(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M')"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
             git push
           fi
 

@@ -79,6 +79,7 @@ class ApiTest(unittest.TestCase):
         settings = fetch.load_settings()
         settings["api"]["endpoint"] = "https://example.invalid/api"
         settings["api"]["page_size"] = 4
+        settings["api"]["workers"] = 2
         fetch._resolved.clear()
         with mock.patch.dict(os.environ, {"DATA_GO_KR_KEY": "abc%2Bdef%3D%3D"}), \
                 mock.patch.object(fetch.requests, "get", side_effect=fake_get):

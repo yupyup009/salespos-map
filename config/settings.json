@@ -8,7 +8,8 @@
     },
     "page_param": "pageNo",
     "size_param": "numOfRows",
-    "page_size": 1000
+    "page_size": 100,
+    "workers": 6
   },
 
   "coord_crs": "auto",
