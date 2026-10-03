@@ -31,5 +31,5 @@
     "update_type": ["DAT_UPDT_SE", "UPDATE_GBN", "updateGbn", "데이터갱신구분"]
   },
 
-  "closed_status_words": ["폐업", "휴업", "취소", "말소", "직권", "만료", "정지"]
+  "closed_status_words": ["폐업", "휴업", "취소", "말소", "직권", "만료", "정지", "전출"]
 }
