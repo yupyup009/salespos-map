@@ -79,6 +79,7 @@ class ApiTest(unittest.TestCase):
         settings = fetch.load_settings()
         settings["api"]["endpoint"] = "https://example.invalid/api"
         settings["api"]["page_size"] = 4
+        fetch._resolved.clear()
         with mock.patch.dict(os.environ, {"DATA_GO_KR_KEY": "abc%2Bdef%3D%3D"}), \
                 mock.patch.object(fetch.requests, "get", side_effect=fake_get):
             records, total = fetch.fetch_all(settings)
@@ -94,6 +95,27 @@ class ApiTest(unittest.TestCase):
                 mock.patch.object(fetch.requests, "get", return_value=mock.Mock(status_code=200, text=xml)):
             with self.assertRaisesRegex(fetch.ApiError, "인증키"):
                 fetch.call_api(settings, 1, 10)
+
+    def test_operation_autodetect_on_error_12(self):
+        err = json.dumps({"OpenAPI_ServiceResponse": {"cmmMsgHeader": {
+            "errMsg": "NO_OPENAPI_SERVICE_ERROR", "returnReasonCode": "12"}}})
+        ok = json.dumps({"response": {"header": {"resultCode": "00"},
+                                      "body": {"totalCount": 1, "items": {"item": RECORDS[:1]}}}})
+        urls = []
+
+        def fake_get(url, params, timeout):
+            urls.append(url)
+            good = url.endswith("/getList")
+            return mock.Mock(status_code=200 if good else 400, text=ok if good else err)
+
+        settings = fetch.load_settings()
+        settings["api"]["endpoint"] = "https://example.invalid/svc"
+        fetch._resolved.clear()
+        with mock.patch.dict(os.environ, {"DATA_GO_KR_KEY": "k"}), \
+                mock.patch.object(fetch.requests, "get", side_effect=fake_get):
+            records, _ = fetch.fetch_all(settings)
+        self.assertEqual(len(records), 1)
+        self.assertEqual(urls[-1], "https://example.invalid/svc/getList")
 
 
 if __name__ == "__main__":

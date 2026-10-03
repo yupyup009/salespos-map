@@ -36,8 +36,16 @@ KST = timezone(timedelta(hours=9))
 CRS_CANDIDATES = ["EPSG:5174", "EPSG:5186", "EPSG:5181", "EPSG:5179", "EPSG:2097"]
 
 
+# End Point 뒤에 붙는 상세기능(오퍼레이션) 이름 후보. 서비스 주소만 넣었을 때 차례로 시도한다.
+OPERATION_CANDIDATES = ["info", "getInfo", "list", "getList", "search", "searchList",
+                        "getMedicalDeviceSalesRentalList", "getMedicalDeviceSalesRentalInfo",
+                        "medical_device_sales_rental_info", "selectList"]
+
+
 class ApiError(RuntimeError):
-    pass
+    def __init__(self, message, code=None):
+        super().__init__(message)
+        self.code = code
 
 
 # ---------------------------------------------------------------- 설정 읽기
@@ -150,21 +158,28 @@ def check_error(obj):
         if "SERVICE_KEY" in str(msg) or str(code) in {"30", "31"}:
             hint = (" → 인증키 문제입니다. 활용신청 승인 후 1~2시간 뒤에 동작하는 경우가 많고,"
                     " Encoding/Decoding 키를 바꿔 넣어 보세요.")
-        raise ApiError(f"API 오류 (코드 {code}): {msg}{hint}")
+        elif str(code) == "12":
+            hint = (" → End Point 주소가 틀렸습니다. 활용신청 상세 화면의 '상세기능' 표에서"
+                    " 요청주소(서비스 주소 뒤에 /기능이름 이 붙은 것)를 넣어 주세요.")
+        raise ApiError(f"API 오류 (코드 {code}): {msg}{hint}", code=str(code))
 
 
-def call_api(settings, page, size, retries=4):
+def call_api(settings, page, size, retries=4, url=None):
     api = settings["api"]
     params = dict(api.get("params", {}))
     params.update({"serviceKey": service_key(), api["page_param"]: page, api["size_param"]: size})
     last = None
     for attempt in range(retries):
         try:
-            r = requests.get(endpoint(settings), params=params, timeout=60)
+            r = requests.get(url or resolve_endpoint(settings), params=params, timeout=60)
             text = r.text.strip()
             if r.status_code >= 500:
                 raise ApiError(f"HTTP {r.status_code}")
             if r.status_code >= 400:
+                try:
+                    check_error(json.loads(text) if text[:1] in "{[" else xml_to_obj(text))
+                except (ET.ParseError, json.JSONDecodeError):
+                    pass
                 raise ApiError(f"HTTP {r.status_code}: {text[:300]}")
             obj = json.loads(text) if text[:1] in "{[" else xml_to_obj(text)
             if find_records(obj) is None:
@@ -176,6 +191,37 @@ def call_api(settings, page, size, retries=4):
                 raise
             time.sleep(2 ** (attempt + 1))
     raise ApiError(f"API 호출 실패 (페이지 {page}): {last}")
+
+
+_resolved = {}
+
+
+def resolve_endpoint(settings):
+    """설정된 주소가 '서비스 없음(12)'이면 상세기능 이름을 붙여 가며 맞는 주소를 찾는다."""
+    base = endpoint(settings)
+    if base in _resolved:
+        return _resolved[base]
+    _resolved[base] = base
+    try:
+        call_api(settings, 1, 1, url=base)
+        return base
+    except ApiError as e:
+        if e.code != "12":
+            raise
+        first_error = e
+    for op in OPERATION_CANDIDATES:
+        url = f"{base.rstrip('/')}/{op}"
+        try:
+            call_api(settings, 1, 1, url=url)
+        except ApiError as e:
+            if e.code == "12" or str(e).startswith("HTTP 404"):
+                continue
+            raise
+        print(f"상세기능 주소를 자동으로 찾았습니다: {url}")
+        print("  (config/settings.json의 endpoint를 이 주소로 바꿔 두면 다음부터 바로 사용합니다)")
+        _resolved[base] = url
+        return url
+    raise first_error
 
 
 def fetch_all(settings):
