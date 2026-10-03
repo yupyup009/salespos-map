@@ -236,7 +236,8 @@ def fetch_all(settings):
             print(f"전체 건수: {total if total is not None else '알 수 없음'}")
         records.extend(batch)
         print(f"  {page}페이지: {len(batch)}건 (누적 {len(records)})")
-        if not batch or len(batch) < size or (total is not None and len(records) >= total):
+        # 서버가 numOfRows를 더 작게 잘라 줄 수도 있으므로 totalCount를 기준으로 끝을 판단한다
+        if not batch or (total is not None and len(records) >= total) or (total is None and len(batch) < size):
             break
         page += 1
         time.sleep(0.2)
@@ -396,6 +397,8 @@ def build(records, settings, regions, kakao=None, log=print):
         n = norm(name)
         hits = [k for k, kn in kw_norm if kn and kn in n]
         if not hits or any(e and e in n for e in excludes):
+            continue
+        if g("update_type").upper() == "D":  # 삭제된 인허가 정보
             continue
         if is_closed(g("status"), g("detail_status"), g("close_date"), settings["closed_status_words"]):
             continue

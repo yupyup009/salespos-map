@@ -1,7 +1,7 @@
 {
   "api": {
     "name": "행정안전부_건강_의료기기판매(임대)업 조회서비스",
-    "endpoint": "https://apis.data.go.kr/1741000/medical_device_sales_rental",
+    "endpoint": "https://apis.data.go.kr/1741000/medical_device_sales_rental/info",
     "params": {
       "type": "json",
       "returnType": "json"
@@ -26,7 +26,8 @@
     "y":           ["CRD_INFO_Y", "Y", "y", "좌표정보Y(EPSG5174)", "좌표정보y(epsg5174)", "좌표정보(Y)"],
     "permit_date": ["LCPMT_YMD", "APV_PERM_YMD", "apvPermYmd", "인허가일자"],
     "close_date":  ["CLSBIZ_YMD", "DCB_YMD", "dcbYmd", "폐업일자"],
-    "updated_at":  ["LAST_MDFCN_PNT", "LAST_MOD_TS", "lastModTs", "최종수정시점"]
+    "updated_at":  ["LAST_MDFCN_PNT", "LAST_MOD_TS", "lastModTs", "최종수정시점"],
+    "update_type": ["DAT_UPDT_SE", "UPDATE_GBN", "updateGbn", "데이터갱신구분"]
   },
 
   "closed_status_words": ["폐업", "휴업", "취소", "말소", "직권", "만료", "정지"]
