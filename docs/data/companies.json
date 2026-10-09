@@ -1,8 +1,8 @@
 {
- "updated_at": "2026-10-09 04:18",
- "source_total": 250251,
- "count": 2783,
- "located": 2650,
+ "updated_at": "2026-10-10 04:20",
+ "source_total": 250300,
+ "count": 2784,
+ "located": 2651,
  "crs": "EPSG:5174",
  "items": [
   {
@@ -22069,6 +22069,23 @@
    "status": "영업중",
    "lat": 37.20547,
    "lng": 127.039789
+  },
+  {
+   "id": "PHMG120265530659047000023",
+   "name": "우리보청기",
+   "sido": "경기",
+   "sigungu": "화성시 효행구",
+   "address": "경기도 화성시 효행구 봉담읍 상리*길 ***, 엔터프라자 ***호",
+   "address_auto": false,
+   "phone": "",
+   "phone_auto": false,
+   "keywords": [
+    "보청기"
+   ],
+   "permit_date": "2026-10-06",
+   "status": "영업중",
+   "lat": 37.227328,
+   "lng": 126.942055
   },
   {
    "id": "PHMG120195530021047000160",
