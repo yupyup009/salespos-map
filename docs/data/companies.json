@@ -1,8 +1,8 @@
 {
- "updated_at": "2026-10-15 04:31",
- "source_total": 250362,
- "count": 2786,
- "located": 2653,
+ "updated_at": "2026-10-16 04:30",
+ "source_total": 250393,
+ "count": 2787,
+ "located": 2654,
  "crs": "EPSG:5174",
  "items": [
   {
@@ -17797,6 +17797,23 @@
    "status": "영업중",
    "lat": 37.31802,
    "lng": 126.835185
+  },
+  {
+   "id": "PHMG120263930154047000046",
+   "name": "진심보청기 안산단원센터",
+   "sido": "경기",
+   "sigungu": "안산시 단원구",
+   "address": "경기도 안산시 단원구 화랑로 ***, 반월종합상가 D동 ***호 (원곡동)",
+   "address_auto": false,
+   "phone": "",
+   "phone_auto": false,
+   "keywords": [
+    "보청기"
+   ],
+   "permit_date": "2026-10-13",
+   "status": "영업중",
+   "lat": 37.3272,
+   "lng": 126.801026
   },
   {
    "id": "PHMG120233930154047000145",
