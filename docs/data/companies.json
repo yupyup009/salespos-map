@@ -1,8 +1,8 @@
 {
- "updated_at": "2026-10-25 06:29",
- "source_total": 250678,
- "count": 2792,
- "located": 2659,
+ "updated_at": "2026-10-26 06:30",
+ "source_total": 250710,
+ "count": 2793,
+ "located": 2661,
  "crs": "EPSG:5174",
  "items": [
   {
@@ -1255,6 +1255,23 @@
    "status": "영업중",
    "lat": 37.563887,
    "lng": 126.851664
+  },
+  {
+   "id": "PHMG120263150037047000159",
+   "name": "독일보청기 강서마곡점",
+   "sido": "서울",
+   "sigungu": "강서구",
+   "address": "서울특별시 강서구 강서로**길 **-*, 상가동 *호 (내발산동, 태승훼미리아파트*차)",
+   "address_auto": false,
+   "phone": "",
+   "phone_auto": false,
+   "keywords": [
+    "보청기"
+   ],
+   "permit_date": "2026-10-21",
+   "status": "영업중",
+   "lat": 37.547778,
+   "lng": 126.832899
   },
   {
    "id": "PHMG120263150037047000152",
@@ -10630,23 +10647,6 @@
     "시그니아"
    ],
    "permit_date": "2014-03-25",
-   "status": "영업중",
-   "lat": null,
-   "lng": null
-  },
-  {
-   "id": "PHMG120193560021047000059",
-   "name": "열린보청기청라센터",
-   "sido": "인천",
-   "sigungu": "서해구",
-   "address": "인천광역시 서해구 청라라임로 **, 진영메디피아 ***호 (청라동)",
-   "address_auto": false,
-   "phone": "",
-   "phone_auto": false,
-   "keywords": [
-    "보청기"
-   ],
-   "permit_date": "2019-08-01",
    "status": "영업중",
    "lat": null,
    "lng": null
@@ -45892,17 +45892,17 @@
    "name": "닥터보청기",
    "sido": "경남",
    "sigungu": "양산시",
-   "address": "경상남도 양산시 삽량로 ***, *층 (중부동, 이석규이비인후과)",
+   "address": "경상남도 양산시 삽량로 ***, 서린프라자 ***호 (중부동)",
    "address_auto": false,
-   "phone": "055-387-0824",
+   "phone": "",
    "phone_auto": false,
    "keywords": [
     "보청기"
    ],
    "permit_date": "2007-01-23",
    "status": "영업중",
-   "lat": 35.335189,
-   "lng": 129.027822
+   "lat": 35.33514,
+   "lng": 129.028376
   },
   {
    "id": "PHMG120245380021047000080",
@@ -47581,6 +47581,23 @@
    "status": "영업중",
    "lat": 35.277678,
    "lng": 128.408507
+  },
+  {
+   "id": "PHMG120245400046047000001",
+   "name": "늘봄보청기 함안점",
+   "sido": "경남",
+   "sigungu": "함안군",
+   "address": "경상남도 함안군 가야읍 함마대로 ****-**, 함안버스터미널 *층 ***호",
+   "address_auto": false,
+   "phone": "",
+   "phone_auto": false,
+   "keywords": [
+    "보청기"
+   ],
+   "permit_date": "2024-02-01",
+   "status": "영업중",
+   "lat": 35.279388,
+   "lng": 128.408895
   },
   {
    "id": "PHMG120175400046047000003",
