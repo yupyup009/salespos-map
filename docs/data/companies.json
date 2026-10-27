@@ -1,8 +1,8 @@
 {
- "updated_at": "2026-10-26 06:30",
- "source_total": 250710,
- "count": 2793,
- "located": 2661,
+ "updated_at": "2026-10-28 07:50",
+ "source_total": 250741,
+ "count": 2794,
+ "located": 2662,
  "crs": "EPSG:5174",
  "items": [
   {
@@ -45868,6 +45868,23 @@
    "status": "영업중",
    "lat": 35.308801,
    "lng": 129.007385
+  },
+  {
+   "id": "PHMG120265380356047000041",
+   "name": "뉴톤보청기 양산증산점",
+   "sido": "경남",
+   "sigungu": "양산시",
+   "address": "경상남도 양산시 물금읍 야리로 **, ***, ***호",
+   "address_auto": false,
+   "phone": "",
+   "phone_auto": false,
+   "keywords": [
+    "보청기"
+   ],
+   "permit_date": "2026-10-22",
+   "status": "영업중",
+   "lat": 35.316736,
+   "lng": 129.001891
   },
   {
    "id": "PHMG120155380021047000059",
